@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -28,8 +30,10 @@ class MainActivity : AppCompatActivity() {
         buttonAlert = findViewById(R.id.button_alert)
 
         lifecycleScope.launch {
-            mainViewModel.counter.collectLatest {
-                textViewCounter.text = it.toString()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.counter.collectLatest {
+                    textViewCounter.text = it.toString()
+                }
             }
         }
     }
